@@ -67,7 +67,7 @@ public class ProductServiceImpl implements  ProductService{
     @Override
     public List<ProductResponse> getAllProducts() {
 
-        List<Product> products=productRepository.findAll();
+        List<Product> products=productRepository.findByActiveTrue();
         return products.stream().map(product->
                         new ProductResponse(
                                 product.getId(),
@@ -98,6 +98,54 @@ public class ProductServiceImpl implements  ProductService{
         variant.setStockQuantity(request.stockQuantity());
 
         productVariantRepository.save(variant);
+    }
+
+    @Override
+    public void updateProduct(Long productId, UpdateProductRequest request) {
+        Product product=productRepository.findById(productId)
+                .orElseThrow(()->
+                new ProductNotFoundException("product not found with id: "+productId));
+
+        product.setName(request.name());
+        product.setDescription(request.description());
+        productRepository.save(product);
+
+    }
+
+    @Override
+    public void updateVariant(Long variantId, UpdateVariantRequest request) {
+        ProductVariant variant=productVariantRepository.
+                findById(variantId)
+                .orElseThrow(()->new VariantNotFoundException("Variant not found with id: "+variantId));
+
+        variant.setVariantName(request.variantName());
+        variant.setSize(request.size());
+        variant.setPrice(request.price());
+
+        productVariantRepository.save(variant);
+    }
+
+    @Override
+    public void deactivateProduct(Long productId) {
+        Product product=productRepository.findById(productId)
+                .orElseThrow(()->
+                        new ProductNotFoundException("product not found with id: "+productId));
+
+        product.setActive(false);
+
+        productRepository.save(product);
+
+    }
+
+    @Override
+    public List<ProductResponse> searchProducts(String keyword) {
+        return productRepository.findByNameContainingIgnoreCase(keyword)
+                .stream()
+                .map(product -> new ProductResponse(
+                        product.getId(),
+                        product.getName(),
+                        product.getDescription()
+                )).toList();
     }
 
 

@@ -2,6 +2,8 @@ package com.ecom.product.controller;
 
 import com.ecom.product.dto.*;
 import com.ecom.product.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,12 +12,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@Tag(name = "Product APIs")
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
 
+    @Operation(summary = "Create Product")
     @PostMapping
     public ResponseEntity<String> createProduct(@RequestBody CreateProductRequest request) {
     productService.createProduct(request);
@@ -49,5 +53,46 @@ public class ProductController {
     public ResponseEntity<String> updateStock(@PathVariable Long variantId, @RequestBody UpdateStockRequest request) {
 productService.updateStock(variantId,request);
         return ResponseEntity.ok("stock updated successfully");
+    }
+
+    @PutMapping("/{productId}")
+    public ResponseEntity<String> updateProduct(@PathVariable Long productId, @RequestBody UpdateProductRequest request) {
+productService.updateProduct(productId,request);
+return ResponseEntity.ok("Product Updated Successfully");
+    }
+
+    @PutMapping("/variants/{variantId}")
+    public ResponseEntity<String> updateVariant(
+            @PathVariable Long variantId,
+            @RequestBody UpdateVariantRequest request) {
+
+        productService.updateVariant(
+                variantId,
+                request);
+
+        return ResponseEntity.ok(
+                "Variant Updated Successfully");
+    }
+
+    @PatchMapping("/{productId}/deactivate")
+    public ResponseEntity<String>
+    deactivateProduct(
+            @PathVariable Long productId) {
+
+        productService.deactivateProduct(
+                productId);
+
+        return ResponseEntity.ok(
+                "Product Deactivated Successfully");
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductResponse>>
+    searchProducts(
+            @RequestParam String keyword) {
+
+        return ResponseEntity.ok(
+                productService
+                        .searchProducts(keyword));
     }
 }
