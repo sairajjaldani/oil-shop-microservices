@@ -5,7 +5,7 @@ import com.ecom.product.entity.Product;
 import com.ecom.product.entity.ProductVariant;
 import com.ecom.product.exception.ProductNotFoundException;
 import com.ecom.product.exception.VariantNotFoundException;
-import com.ecom.product.repository.PoductVariantRepository;
+import com.ecom.product.repository.ProductVariantRepository;
 import com.ecom.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class ProductServiceImpl implements  ProductService{
 
     private final ProductRepository productRepository;
 
-    private final PoductVariantRepository productVariantRepository;
+    private final ProductVariantRepository productVariantRepository;
 
     @Override
     public void createProduct(CreateProductRequest request) {
@@ -29,7 +29,6 @@ public class ProductServiceImpl implements  ProductService{
                 .build();
 
         productRepository.save(product);
-
     }
 
     @Override
