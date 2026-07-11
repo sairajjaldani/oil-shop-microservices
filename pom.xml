@@ -12,12 +12,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>common-library</module>
-        <module>api-gateway</module>
+
         <module>auth-service</module>
         <module>product-service</module>
-        <module>order-service</module>
-        <module>payment-service</module>
+
     </modules>
 
 </project>
